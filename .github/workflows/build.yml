@@ -8,8 +8,6 @@ on:
 
 jobs:
   publish-tauri:
-    permissions:
-      contents: write
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,12 +24,10 @@ jobs:
         run: npm install
 
       - name: build tauri app
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run tauri build
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          tagName: app-v__VERSION__
-          releaseName: "Cold Files Kızıl Ejder v__VERSION__"
-          releaseBody: "Otomatik bulut derlemesi."
-          releaseDraft: true
-          prerelease: false
+          name: Cold-Files-Kizil-Ejder-EXE
+          path: src-tauri/target/release/bundle/nsis/*.exe
